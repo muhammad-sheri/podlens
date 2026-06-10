@@ -1,3 +1,7 @@
+# Dedicated project name so PodLens's containers, network and volumes stay
+# isolated from any other Docker stacks on the same machine.
+name: podlens
+
 services:
   postgres:
     image: postgres:16-alpine
@@ -7,7 +11,8 @@ services:
       POSTGRES_USER: podlens
       POSTGRES_PASSWORD: podlens
     ports:
-      - "5432:5432"
+      # Host 5433 -> container 5432 to avoid clashing with other local Postgres.
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -25,8 +30,10 @@ services:
       CLICKHOUSE_PASSWORD: podlens
       CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
     ports:
-      - "8123:8123"   # HTTP interface (used by clickhouse-connect)
-      - "9000:9000"   # native protocol
+      # Host 8124/9001 -> container 8123/9000 to avoid clashing with other
+      # local ClickHouse instances that publish the standard 8123/9000.
+      - "8124:8123"   # HTTP interface (used by clickhouse-connect)
+      - "9001:9000"   # native protocol
     ulimits:
       nofile:
         soft: 262144

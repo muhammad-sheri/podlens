@@ -24,6 +24,21 @@ API keys required.
 - Python 3.11+
 - Node 18+
 
+## Ports
+
+To avoid colliding with other local stacks, PodLens publishes its databases on
+non-standard host ports (the containers themselves use the defaults internally):
+
+| Service          | Host port | Container port |
+| ---------------- | --------- | -------------- |
+| PostgreSQL       | `5433`    | 5432           |
+| ClickHouse HTTP  | `8124`    | 8123           |
+| ClickHouse native| `9001`    | 9000           |
+
+The compose project name is `podlens`, so its containers, network, and volumes
+stay isolated from any other Docker projects. `.env.example` already points the
+backend at `5433` / `8124`.
+
 ## Quick start
 
 ```bash
