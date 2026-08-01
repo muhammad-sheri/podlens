@@ -85,6 +85,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
+    # Defaults to django.contrib.auth.models.AnonymousUser, which cannot be
+    # imported now that contrib.auth is gone. None makes request.user None.
+    "UNAUTHENTICATED_USER": None,
 }
 
 # --- CORS ---
