@@ -91,7 +91,8 @@ REST_FRAMEWORK = {
 }
 
 # --- CORS ---
-CORS_ALLOWED_ORIGINS = [os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")]
+FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")
+CORS_ALLOWED_ORIGINS = [FRONTEND_ORIGIN]
 
 # --- ClickHouse (analytics store) ---
 CLICKHOUSE = {
