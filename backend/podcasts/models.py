@@ -1,7 +1,5 @@
 from django.db import models
 
-PLATFORMS = ("spotify", "youtube", "apple")
-
 
 class Podcast(models.Model):
     title = models.CharField(max_length=255)
