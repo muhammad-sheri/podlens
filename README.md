@@ -90,6 +90,7 @@ Every endpoint is open — no headers, no tokens.
 
 | Method | Endpoint                   | Purpose                          |
 | ------ | -------------------------- | -------------------------------- |
+| GET    | `/`                        | JSON index of every endpoint     |
 | GET    | `/api/health`              | Liveness check                   |
 | CRUD   | `/api/podcasts/`           | Manage podcasts                  |
 | CRUD   | `/api/episodes/`           | Manage episodes                  |
