@@ -1,8 +1,8 @@
 """Seed demo data so the whole app runs and every chart renders locally.
 
-Creates a demo user + podcasts + episodes in Postgres, then generates ~90 days
-of realistic randomized analytics events in ClickHouse. Idempotent-ish: it wipes
-the demo user's prior data before reseeding so repeated runs stay clean.
+Creates podcasts + episodes in Postgres, then generates ~90 days of realistic
+randomized analytics events in ClickHouse. Idempotent: it wipes the prior demo
+data before reseeding so repeated runs stay clean.
 
 Runnable two ways:
     python manage.py seed_demo
@@ -10,9 +10,6 @@ Runnable two ways:
 """
 import datetime as dt
 import random
-
-DEMO_EMAIL = "demo@podlens.app"
-DEMO_PASSWORD = "podlens-demo"
 
 PODCASTS = [
     {
@@ -45,28 +42,16 @@ PLATFORM_WEIGHTS = {"spotify": 1.0, "youtube": 0.7, "apple": 0.5}
 
 def seed(days: int = 90, log=print):
     """Create demo data. `log` lets the management command route output."""
-    from django.contrib.auth import get_user_model
-
     from analytics.clickhouse import EVENTS_TABLE, ensure_schema
     from podcasts.models import Episode, Podcast
 
-    User = get_user_model()
-
-    user, created = User.objects.get_or_create(
-        email=DEMO_EMAIL, defaults={"first_name": "Demo", "last_name": "Creator"}
-    )
-    user.set_password(DEMO_PASSWORD)
-    user.save()
-    log(f"{'Created' if created else 'Found'} demo user: {DEMO_EMAIL}")
-
     # Reset prior demo podcasts (cascades to episodes).
-    Podcast.objects.filter(owner=user).delete()
+    Podcast.objects.all().delete()
 
     today = dt.date.today()
     rows = []
     for pod_spec in PODCASTS:
         podcast = Podcast.objects.create(
-            owner=user,
             title=pod_spec["title"],
             description=pod_spec["description"],
             platforms=pod_spec["platforms"],
@@ -109,9 +94,7 @@ def seed(days: int = 90, log=print):
                     )
 
     client = ensure_schema()
-    podcast_ids = list(
-        Podcast.objects.filter(owner=user).values_list("id", flat=True)
-    )
+    podcast_ids = list(Podcast.objects.values_list("id", flat=True))
     if podcast_ids:
         client.command(
             f"ALTER TABLE {EVENTS_TABLE} DELETE WHERE podcast_id IN "
@@ -131,9 +114,7 @@ def seed(days: int = 90, log=print):
         ],
     )
     log(f"Inserted {len(rows):,} analytics rows into ClickHouse.")
-    log("Done. Log in with:")
-    log(f"  email:    {DEMO_EMAIL}")
-    log(f"  password: {DEMO_PASSWORD}")
+    log("Done. Open http://localhost:5173 to see the dashboard.")
 
 
 def _bootstrap_django():

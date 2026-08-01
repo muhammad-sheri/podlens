@@ -61,6 +61,13 @@ a {
   flex: 1;
 }
 
+.nav-footer {
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .main {
   flex: 1;
   padding: 32px;
@@ -138,21 +145,6 @@ button {
 button:disabled {
   opacity: 0.6;
   cursor: default;
-}
-
-input {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--text);
-  margin-bottom: 12px;
-}
-
-.login-wrap {
-  max-width: 360px;
-  margin: 12vh auto;
 }
 
 .insight {

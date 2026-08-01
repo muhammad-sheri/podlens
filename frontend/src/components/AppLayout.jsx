@@ -1,8 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { useAuth } from "../auth/AuthContext.jsx";
 
 export default function AppLayout() {
-  const { user, logout } = useAuth();
   return (
     <div className="app-shell">
       <nav className="nav">
@@ -13,12 +11,7 @@ export default function AppLayout() {
         <NavLink to="/episodes">Episodes</NavLink>
         <NavLink to="/insights">AI Insights</NavLink>
         <div className="spacer" />
-        <div className="muted" style={{ fontSize: 13 }}>
-          {user?.email}
-        </div>
-        <button onClick={logout} style={{ marginTop: 8 }}>
-          Log out
-        </button>
+        <div className="nav-footer">Podcast analytics</div>
       </nav>
       <main className="main">
         <Outlet />

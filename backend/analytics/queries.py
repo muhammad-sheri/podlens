@@ -1,8 +1,7 @@
 """Aggregation queries over the ClickHouse events table.
 
-Every query is scoped to a set of podcast ids so a user only ever sees their own
-analytics. The caller (the view layer) resolves which podcast ids belong to the
-authenticated user.
+Every query is scoped to a set of podcast ids, which the view layer resolves.
+PodLens is single-tenant, so that set is normally every podcast in Postgres.
 """
 from .clickhouse import EVENTS_TABLE, get_client
 
