@@ -94,12 +94,10 @@ def seed(days: int = 90, log=print):
                     )
 
     client = ensure_schema()
-    podcast_ids = list(Podcast.objects.values_list("id", flat=True))
-    if podcast_ids:
-        client.command(
-            f"ALTER TABLE {EVENTS_TABLE} DELETE WHERE podcast_id IN "
-            f"({','.join(str(p) for p in podcast_ids)})"
-        )
+    # Every prior event row is orphaned by the Podcast wipe above (reseeding
+    # mints fresh ids), so clear the table outright. Deleting by the *new* ids
+    # matched nothing and left old rows to accumulate on every run.
+    client.command(f"TRUNCATE TABLE {EVENTS_TABLE}")
     client.insert(
         EVENTS_TABLE,
         rows,
