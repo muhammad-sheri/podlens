@@ -4,7 +4,7 @@ from pipeline.seed import seed
 
 
 class Command(BaseCommand):
-    help = "Seed demo user, podcasts, episodes (Postgres) and analytics (ClickHouse)."
+    help = "Seed demo podcasts and episodes (Postgres) and analytics (ClickHouse)."
 
     def add_arguments(self, parser):
         parser.add_argument(

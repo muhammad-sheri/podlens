@@ -5,6 +5,10 @@ psycopg2-binary==2.9.9
 clickhouse-connect==0.7.16
 prefect==2.19.4
 griffe==0.47.0  # prefect 2.19 imports griffe.dataclasses, removed in griffe>=1.0
+# prefect 2.19 calls create_model(__config__=<class>), which pydantic >= 2.11
+# rejects with "TypeError: 'type' object is not iterable" — that fires inside
+# the @flow decorator, so pipeline/flows.py fails on import.
+pydantic==2.10.6
 # 0.40.0 predates the adaptive-thinking / output_config params used in
 # insights/claude_client.py and rejects them with a TypeError.
 anthropic==0.120.2

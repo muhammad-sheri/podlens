@@ -23,6 +23,13 @@ def refresh_analytics(days: int = 90):
 
 
 if __name__ == "__main__":
+    import os
+    import sys
+
+    # Running this file as a script puts backend/pipeline/ on sys.path, not
+    # backend/, so `import pipeline...` would fail. Add the project root first.
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
     from pipeline.seed import _bootstrap_django
 
     _bootstrap_django()
